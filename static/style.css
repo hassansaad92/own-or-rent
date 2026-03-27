@@ -54,8 +54,11 @@ header p {
     gap: 1rem;
 }
 
-.info-banner p {
+.info-text {
     flex: 1;
+}
+
+.info-banner p {
     font-size: 0.88rem;
     color: #1e40af;
     line-height: 1.5;
@@ -77,10 +80,9 @@ header p {
 }
 
 .info-note {
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     color: #3b82f6;
-    flex-shrink: 0;
-    white-space: nowrap;
+    margin-top: 0.25rem;
 }
 
 .info-banner.hidden {
