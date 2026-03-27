@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy vs Rent Calculator</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.0.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-row">
+            <div>
+                <h1>Buy vs Rent Wealth Calculator</h1>
+                <p>Compare long-term wealth: homeownership vs renting &amp; investing</p>
+            </div>
+            <a href="#" id="metrics-btn" class="metrics-link">Metric Definitions</a>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <!-- Left: Sliders -->
+        <aside class="left-panel">
+            <h2>Assumptions</h2>
+            <div class="sliders-list">
+                <div class="slider-group">
+                    <label for="home_price">Home Price</label>
+                    <div class="slider-row">
+                        <input type="range" id="home_price" min="200000" max="5000000" step="25000" value="1600000">
+                        <input type="number" id="home_price_val" min="200000" max="5000000" step="25000" value="1600000">
+                    </div>
+                    <span class="slider-display" id="home_price_display">$1,600,000</span>
+                </div>
+                <div class="slider-group">
+                    <label for="down_payment">Down Payment</label>
+                    <div class="slider-row">
+                        <input type="range" id="down_payment" min="0" max="2000000" step="10000" value="250000">
+                        <input type="number" id="down_payment_val" min="0" max="2000000" step="10000" value="250000">
+                    </div>
+                    <span class="slider-display" id="down_payment_display">$250,000</span>
+                </div>
+                <div class="slider-group">
+                    <label for="interest_rate">Interest Rate (%)</label>
+                    <div class="slider-row">
+                        <input type="range" id="interest_rate" min="1" max="12" step="0.1" value="6.0">
+                        <input type="number" id="interest_rate_val" min="1" max="12" step="0.1" value="6.0">
+                    </div>
+                    <span class="slider-display" id="interest_rate_display">6.0%</span>
+                </div>
+                <div class="slider-group">
+                    <label for="sp500_return">S&P 500 Return (%)</label>
+                    <div class="slider-row">
+                        <input type="range" id="sp500_return" min="0" max="20" step="0.1" value="11.8">
+                        <input type="number" id="sp500_return_val" min="0" max="20" step="0.1" value="11.8">
+                    </div>
+                    <span class="slider-display" id="sp500_return_display">11.8%</span>
+                </div>
+                <div class="slider-group">
+                    <label for="house_appreciation">Home Appreciation (%)</label>
+                    <div class="slider-row">
+                        <input type="range" id="house_appreciation" min="0" max="15" step="0.1" value="5.4">
+                        <input type="number" id="house_appreciation_val" min="0" max="15" step="0.1" value="5.4">
+                    </div>
+                    <span class="slider-display" id="house_appreciation_display">5.4%</span>
+                </div>
+                <div class="slider-group">
+                    <label for="annual_maintenance">Annual Maintenance</label>
+                    <div class="slider-row">
+                        <input type="range" id="annual_maintenance" min="0" max="50000" step="500" value="15000">
+                        <input type="number" id="annual_maintenance_val" min="0" max="50000" step="500" value="15000">
+                    </div>
+                    <span class="slider-display" id="annual_maintenance_display">$15,000</span>
+                </div>
+                <div class="slider-group">
+                    <label for="monthly_rent">Month 1 Rent</label>
+                    <div class="slider-row">
+                        <input type="range" id="monthly_rent" min="500" max="15000" step="100" value="5000">
+                        <input type="number" id="monthly_rent_val" min="500" max="15000" step="100" value="5000">
+                    </div>
+                    <span class="slider-display" id="monthly_rent_display">$5,000</span>
+                </div>
+                <div class="slider-group">
+                    <label for="annual_rent_increase">Rent Increase (%/yr)</label>
+                    <div class="slider-row">
+                        <input type="range" id="annual_rent_increase" min="0" max="10" step="0.1" value="5.0">
+                        <input type="number" id="annual_rent_increase_val" min="0" max="10" step="0.1" value="5.0">
+                    </div>
+                    <span class="slider-display" id="annual_rent_increase_display">5.0%</span>
+                </div>
+                <div class="slider-group">
+                    <label for="property_tax_rate">Property Tax (%)</label>
+                    <div class="slider-row">
+                        <input type="range" id="property_tax_rate" min="0" max="3" step="0.05" value="1.25">
+                        <input type="number" id="property_tax_rate_val" min="0" max="3" step="0.05" value="1.25">
+                    </div>
+                    <span class="slider-display" id="property_tax_rate_display">1.25%</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right: Results -->
+        <main class="right-panel">
+            <!-- Summary Table -->
+            <section class="summary-section">
+                <h2>Snapshot Comparison</h2>
+                <table id="summary-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Year 1</th>
+                            <th>Year 5</th>
+                            <th>Year 10</th>
+                            <th>Year 15</th>
+                            <th>Year 20</th>
+                            <th>Year 30</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="row-appreciation">
+                            <td>(+) Appreciation</td>
+                            <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                        </tr>
+                        <tr id="row-rent-savings">
+                            <td>(+) Rent Savings</td>
+                            <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                        </tr>
+                        <tr id="row-mortgage">
+                            <td>(-) Mortgage Payments</td>
+                            <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                        </tr>
+                        <tr id="row-opportunity">
+                            <td>(-) Opportunity Cost</td>
+                            <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                        </tr>
+                        <tr id="row-property-tax">
+                            <td>(-) Property Tax</td>
+                            <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                        </tr>
+                        <tr id="row-maintenance">
+                            <td>(-) Maintenance</td>
+                            <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                        </tr>
+                        <tr id="row-net" class="net-row">
+                            <td>Net Value</td>
+                            <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="monthly-payment"><strong>Home Ownership:</strong> Monthly Mortgage Payment: <strong id="monthly-payment-val">—</strong> | Total Paid Over 30 Years: <strong id="total-paid-val">—</strong></p>
+            </section>
+
+            <!-- Chart -->
+            <section class="chart-section">
+                <div class="chart-controls">
+                    <button class="chart-btn active" data-mode="cumulative">Cumulative</button>
+                    <button class="chart-btn" data-mode="yearly">Yearly</button>
+                </div>
+                <div id="chart"></div>
+            </section>
+
+            <!-- Chat -->
+            <section class="chat-section">
+                <h2>Ask Claude</h2>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="chat-msg assistant">
+                        <p>Hi! I can help you analyze your buy vs rent scenario. Ask me anything about the numbers.</p>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <textarea id="chat-input" placeholder="Ask about your scenario..." rows="2"></textarea>
+                    <button id="chat-send">Send</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Metrics Modal -->
+    <div id="metrics-modal" class="metrics-modal hidden">
+        <div class="metrics-modal-header" id="metrics-header">
+            <h3>Metric Definitions</h3>
+            <button id="metrics-close">&times;</button>
+        </div>
+        <div class="metrics-modal-body">
+            <dl>
+                <dt>(+) Appreciation</dt>
+                <dd>Cumulative increase in home market value above purchase price.</dd>
+                <dt>(+) Rent Savings</dt>
+                <dd>Cumulative rent you avoided by owning instead of renting, growing annually at the rent increase rate.</dd>
+                <dt>(-) Mortgage Payments</dt>
+                <dd>Cumulative principal + interest paid to the lender over time.</dd>
+                <dt>(-) Opportunity Cost</dt>
+                <dd>How much your down payment would have grown if invested in the S&P 500 instead, minus the original amount.</dd>
+                <dt>(-) Property Tax</dt>
+                <dd>Cumulative property taxes paid. Assessed value increases at most 2% per year (Prop 13), capped at market value.</dd>
+                <dt>(-) Maintenance</dt>
+                <dd>Cumulative home maintenance and repair costs (flat annual amount).</dd>
+                <dt>Net Value</dt>
+                <dd>Sum of all factors. Positive means buying is ahead; negative means renting would have been better.</dd>
+            </dl>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
