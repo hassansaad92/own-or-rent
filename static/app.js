@@ -301,7 +301,9 @@ async function sendChat() {
                         const parsed = JSON.parse(payload);
                         fullText += parsed.text;
                         contentP.innerHTML = simpleMarkdown(fullText);
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        if (chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight < 80) {
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
                     } catch {}
                 }
             }
@@ -420,7 +422,9 @@ function appendMessage(role, text) {
     }
     div.appendChild(p);
     chatMessages.appendChild(div);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    if (chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight < 80) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
     return div;
 }
 
