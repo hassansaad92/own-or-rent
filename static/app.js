@@ -185,15 +185,21 @@ function updateChart(data) {
             hoverlabel: { namelength: -1 },
         }, { responsive: true });
     } else {
+        // Year-over-year change in net value
+        const yearlyChange = data.years.map((d, i) => {
+            const prev = i > 0 ? data.years[i - 1].net_value : 0;
+            return d.net_value - prev;
+        });
+
         const traces = [
             {
                 x: years,
-                y: data.years.map((d) => d.net_value),
-                name: "Net Value (Buy vs Rent)",
+                y: yearlyChange,
+                name: "Annual Change in Net Value",
                 type: "bar",
                 marker: {
-                    color: data.years.map((d) =>
-                        d.net_value >= 0 ? "#16a34a" : "#dc2626"
+                    color: yearlyChange.map((v) =>
+                        v >= 0 ? "#16a34a" : "#dc2626"
                     ),
                 },
                 hovertemplate: "Year %{x}: %{y:$,.0f}<extra></extra>",
@@ -201,9 +207,9 @@ function updateChart(data) {
         ];
 
         Plotly.newPlot("chart", traces, {
-            title: "Net Value of Buying by Year",
+            title: "Annual Change in Net Value (Buy vs Rent)",
             xaxis: { title: "Year", dtick: 5 },
-            yaxis: { title: "Net Value ($)", tickformat: "$,.0f" },
+            yaxis: { title: "Change ($)", tickformat: "$,.0f" },
             margin: { t: 50, r: 30 },
             hoverlabel: { namelength: -1 },
         }, { responsive: true });
@@ -441,6 +447,14 @@ document.addEventListener("mousemove", (e) => {
 
 document.addEventListener("mouseup", () => {
     isDragging = false;
+});
+
+// Disclaimer modal
+document.getElementById("settings-btn").addEventListener("click", () => {
+    document.getElementById("disclaimer-modal").classList.toggle("hidden");
+});
+document.getElementById("disclaimer-close").addEventListener("click", () => {
+    document.getElementById("disclaimer-modal").classList.add("hidden");
 });
 
 // Info banner dismiss

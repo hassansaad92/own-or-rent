@@ -76,6 +76,13 @@ header p {
     color: #1e3a8a;
 }
 
+.info-note {
+    font-size: 0.78rem;
+    color: #3b82f6;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
 .info-banner.hidden {
     display: none;
 }
@@ -363,6 +370,14 @@ tbody tr:not(:last-child) {
     cursor: not-allowed;
 }
 
+.chat-notice {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    text-align: center;
+    padding: 0.4rem 1rem 0.6rem;
+    font-style: italic;
+}
+
 /* Metrics Modal */
 .metrics-modal {
     position: fixed;
@@ -495,6 +510,99 @@ tbody tr:not(:last-child) {
 .chat-msg table th {
     background: #e2e8f0;
     font-weight: 600;
+}
+
+/* Settings Button */
+.settings-btn {
+    position: fixed;
+    bottom: 1.25rem;
+    left: 1.25rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1a1a2e;
+    color: #94a3b8;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+}
+
+.settings-btn:hover {
+    color: #fff;
+}
+
+/* Disclaimer Modal */
+.disclaimer-modal {
+    position: fixed;
+    left: 1.25rem;
+    bottom: 4.5rem;
+    width: 400px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+    z-index: 1000;
+}
+
+.disclaimer-modal.hidden {
+    display: none;
+}
+
+.disclaimer-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: #1a1a2e;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+}
+
+.disclaimer-modal-header h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.disclaimer-modal-header button {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.3rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 0.25rem;
+}
+
+.disclaimer-modal-header button:hover {
+    color: #fff;
+}
+
+.disclaimer-modal-body {
+    padding: 1rem 1.25rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #475569;
+}
+
+.disclaimer-modal-body p {
+    margin-bottom: 0.6rem;
+}
+
+.disclaimer-modal-body hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 0.75rem 0;
+}
+
+.disclaimer-credit {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-style: italic;
 }
 
 /* Responsive */
