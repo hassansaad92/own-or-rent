@@ -29,7 +29,10 @@
     <div class="app-layout">
         <!-- Left: Sliders -->
         <aside class="left-panel">
-            <h2>Assumptions</h2>
+            <div class="panel-header">
+                <h2>Assumptions</h2>
+                <button class="reset-btn" id="reset-btn">&#8635;</button>
+            </div>
             <div class="sliders-list">
                 <div class="slider-group">
                     <label for="home_price">Home Price</label>
@@ -42,8 +45,8 @@
                 <div class="slider-group">
                     <label for="down_payment">Down Payment</label>
                     <div class="slider-row">
-                        <input type="range" id="down_payment" min="0" max="2000000" step="10000" value="250000">
-                        <input type="number" id="down_payment_val" min="0" max="2000000" step="10000" value="250000">
+                        <input type="range" id="down_payment" min="0" max="5000000" step="10000" value="250000">
+                        <input type="number" id="down_payment_val" min="0" max="5000000" step="10000" value="250000">
                     </div>
                     <span class="slider-display" id="down_payment_display">$250,000</span>
                 </div>
@@ -58,18 +61,18 @@
                 <div class="slider-group">
                     <label for="sp500_return">S&P 500 Return (%)</label>
                     <div class="slider-row">
-                        <input type="range" id="sp500_return" min="0" max="20" step="0.1" value="11.8">
-                        <input type="number" id="sp500_return_val" min="0" max="20" step="0.1" value="11.8">
+                        <input type="range" id="sp500_return" min="0" max="20" step="0.1" value="10.0">
+                        <input type="number" id="sp500_return_val" min="0" max="20" step="0.1" value="10.0">
                     </div>
-                    <span class="slider-display" id="sp500_return_display">11.8%</span>
+                    <span class="slider-display" id="sp500_return_display">10.0%</span>
                 </div>
                 <div class="slider-group">
                     <label for="house_appreciation">Home Appreciation (%)</label>
                     <div class="slider-row">
-                        <input type="range" id="house_appreciation" min="0" max="15" step="0.1" value="5.4">
-                        <input type="number" id="house_appreciation_val" min="0" max="15" step="0.1" value="5.4">
+                        <input type="range" id="house_appreciation" min="0" max="15" step="0.1" value="4.4">
+                        <input type="number" id="house_appreciation_val" min="0" max="15" step="0.1" value="4.4">
                     </div>
-                    <span class="slider-display" id="house_appreciation_display">5.4%</span>
+                    <span class="slider-display" id="house_appreciation_display">4.4%</span>
                 </div>
                 <div class="slider-group">
                     <label for="annual_maintenance">Annual Maintenance</label>

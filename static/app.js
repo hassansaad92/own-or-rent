@@ -34,12 +34,14 @@ SLIDERS.forEach(({ id, fmt }) => {
     slider.addEventListener("input", () => {
         numInput.value = slider.value;
         display.textContent = formatDisplay(slider.value, fmt);
+        if (id === "home_price" || id === "down_payment") clampDownPayment();
         debouncedCalculate();
     });
 
     numInput.addEventListener("input", () => {
         slider.value = numInput.value;
         display.textContent = formatDisplay(numInput.value, fmt);
+        if (id === "home_price" || id === "down_payment") clampDownPayment();
         debouncedCalculate();
     });
 });
@@ -50,6 +52,19 @@ function getSliderValues() {
         vals[id] = parseFloat(document.getElementById(id).value);
     });
     return vals;
+}
+
+function clampDownPayment() {
+    const homePrice = parseFloat(document.getElementById("home_price").value);
+    const dpSlider = document.getElementById("down_payment");
+    const dpNum = document.getElementById("down_payment_val");
+    const dpDisplay = document.getElementById("down_payment_display");
+
+    if (parseFloat(dpSlider.value) > homePrice) {
+        dpSlider.value = homePrice;
+        dpNum.value = homePrice;
+        dpDisplay.textContent = fmtDollar(homePrice);
+    }
 }
 
 let calcTimer = null;
@@ -447,6 +462,33 @@ document.addEventListener("mousemove", (e) => {
 
 document.addEventListener("mouseup", () => {
     isDragging = false;
+});
+
+// Reset to defaults
+const DEFAULTS = {
+    home_price: 1600000,
+    down_payment: 250000,
+    interest_rate: 6.0,
+    sp500_return: 10.0,
+    house_appreciation: 4.4,
+    annual_maintenance: 15000,
+    monthly_rent: 5000,
+    annual_rent_increase: 5.0,
+    property_tax_rate: 1.25,
+};
+
+document.getElementById("reset-btn").addEventListener("click", (e) => {
+    const btn = e.currentTarget;
+    btn.classList.add("spinning");
+    setTimeout(() => btn.classList.remove("spinning"), 500);
+
+    SLIDERS.forEach(({ id, fmt }) => {
+        const val = DEFAULTS[id];
+        document.getElementById(id).value = val;
+        document.getElementById(id + "_val").value = val;
+        document.getElementById(id + "_display").textContent = formatDisplay(val, fmt);
+    });
+    debouncedCalculate();
 });
 
 // Disclaimer modal

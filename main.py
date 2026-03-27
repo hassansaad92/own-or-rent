@@ -19,8 +19,8 @@ class CalculateRequest(BaseModel):
     home_price: float = 1_600_000
     down_payment: float = 250_000
     interest_rate: float = 6.0
-    sp500_return: float = 11.8
-    house_appreciation: float = 5.4
+    sp500_return: float = 10.0
+    house_appreciation: float = 4.4
     annual_maintenance: float = 15_000
     monthly_rent: float = 5_000
     annual_rent_increase: float = 5.0
@@ -156,15 +156,28 @@ Help them understand the financial implications. Be concise and use specific num
 Format currency values with commas and dollar signs. Use markdown for formatting.
 Do NOT use markdown tables. Use bullet lists instead when comparing values."""
 
+    cheap_msg = "Sorry, the funder of the API token is too cheap and you can't use this feature right now."
+    error_msg = "Something went wrong. Please try again later."
+
     def generate():
-        with client.messages.stream(
-            model="claude-sonnet-4-6",
-            max_tokens=1024,
-            system=system_prompt,
-            messages=[{"role": "user", "content": req.message}],
-        ) as stream:
-            for text in stream.text_stream:
-                yield f"data: {json.dumps({'text': text})}\n\n"
+        try:
+            with client.messages.stream(
+                model="claude-sonnet-4-6",
+                max_tokens=1024,
+                system=system_prompt,
+                messages=[{"role": "user", "content": req.message}],
+            ) as stream:
+                for text in stream.text_stream:
+                    yield f"data: {json.dumps({'text': text})}\n\n"
+        except anthropic.RateLimitError:
+            yield f"data: {json.dumps({'text': cheap_msg})}\n\n"
+        except anthropic.AuthenticationError:
+            yield f"data: {json.dumps({'text': cheap_msg})}\n\n"
+        except anthropic.APIStatusError as e:
+            if e.status_code in (402, 429):
+                yield f"data: {json.dumps({'text': cheap_msg})}\n\n"
+            else:
+                yield f"data: {json.dumps({'text': error_msg})}\n\n"
         yield "data: [DONE]\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")

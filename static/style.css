@@ -108,10 +108,66 @@ header p {
     align-self: start;
 }
 
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
 .left-panel h2 {
     font-size: 1.1rem;
-    margin-bottom: 1rem;
     color: #334155;
+}
+
+.reset-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    font-size: 1.1rem;
+    color: #64748b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s;
+}
+
+.reset-btn {
+    position: relative;
+}
+
+.reset-btn:hover {
+    color: #2563eb;
+    border-color: #2563eb;
+}
+
+.reset-btn:hover::after {
+    content: "Reset to defaults";
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 8px;
+    background: #1e293b;
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 1001;
+}
+
+.reset-btn.spinning {
+    animation: spin 0.5s ease;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .sliders-list {
