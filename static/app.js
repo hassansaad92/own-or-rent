@@ -199,7 +199,7 @@ function updateChart(data) {
             margin: { t: 50, r: 30, b: 120 },
             hoverlabel: { namelength: -1 },
         }, { responsive: true });
-    } else {
+    } else if (chartMode === "yearly") {
         // Year-over-year change in net value
         const yearlyChange = data.years.map((d, i) => {
             const prev = i > 0 ? data.years[i - 1].net_value : 0;
@@ -226,6 +226,64 @@ function updateChart(data) {
             xaxis: { title: "Year", dtick: 5 },
             yaxis: { title: "Change ($)", tickformat: "$,.0f" },
             margin: { t: 50, r: 30 },
+            hoverlabel: { namelength: -1 },
+        }, { responsive: true });
+    } else {
+        // Stacked bar breakdown by component with net change line overlay
+        const annualAppreciation = data.years.map((d, i) => {
+            const prev = i > 0 ? data.years[i - 1].appreciation : 0;
+            return d.appreciation - prev;
+        });
+        const annualRent = data.years.map((d) => d.annual_rent);
+        const annualMortgage = data.years.map((d) => -d.annual_mortgage);
+        const annualOpportunity = data.years.map((d, i) => {
+            const prev = i > 0 ? data.years[i - 1].opportunity_cost : 0;
+            return -(d.opportunity_cost - prev);
+        });
+        const annualPropertyTax = data.years.map((d) => -d.property_tax);
+        const annualMaintenance = data.years.map((d) => -d.maintenance);
+        const barHover = "%{fullData.name}<br>Year %{x}: %{y:$,.0f}<extra></extra>";
+
+        const traces = [
+            {
+                x: years, y: annualAppreciation, name: "Appreciation",
+                type: "bar", marker: { color: "#16a34a" },
+                hovertemplate: barHover,
+            },
+            {
+                x: years, y: annualRent, name: "Rent Savings",
+                type: "bar", marker: { color: "#2563eb" },
+                hovertemplate: barHover,
+            },
+            {
+                x: years, y: annualMortgage, name: "Mortgage",
+                type: "bar", marker: { color: "#dc2626" },
+                hovertemplate: barHover,
+            },
+            {
+                x: years, y: annualOpportunity, name: "Opportunity Cost",
+                type: "bar", marker: { color: "#f97316" },
+                hovertemplate: barHover,
+            },
+            {
+                x: years, y: annualPropertyTax, name: "Property Tax",
+                type: "bar", marker: { color: "#8b5cf6" },
+                hovertemplate: barHover,
+            },
+            {
+                x: years, y: annualMaintenance, name: "Maintenance",
+                type: "bar", marker: { color: "#64748b" },
+                hovertemplate: barHover,
+            },
+        ];
+
+        Plotly.newPlot("chart", traces, {
+            title: "Annual Breakdown by Component",
+            xaxis: { title: "Year", dtick: 5 },
+            yaxis: { title: "Annual Value ($)", tickformat: "$,.0f" },
+            barmode: "relative",
+            legend: { orientation: "h", y: -0.2, x: 0.5, xanchor: "center" },
+            margin: { t: 50, r: 30, b: 120 },
             hoverlabel: { namelength: -1 },
         }, { responsive: true });
     }
