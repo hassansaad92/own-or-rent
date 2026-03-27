@@ -443,5 +443,10 @@ document.addEventListener("mouseup", () => {
     isDragging = false;
 });
 
+// Info banner dismiss
+document.getElementById("info-dismiss").addEventListener("click", () => {
+    document.getElementById("info-banner").classList.add("hidden");
+});
+
 // Initial calculation
 calculate();
